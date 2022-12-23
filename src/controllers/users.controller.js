@@ -1,15 +1,11 @@
-const {errorHandler} = require("../util");
-const models = require("../models");
-const {HttpError} = require("../error");
+const { errorHandler } = require("../util");
+const { HttpError } = require("../error");
+const { userService } = require("../service");
 
-const me = errorHandler(async (req, res) => {
-    const userDoc = await models.User.findById(req.userId).exec();
-    if (!userDoc) {
-        throw new HttpError(400, 'User not found');
-    }
-    return userDoc;
+const getUserById = errorHandler(async (req, res) => {
+  return userService.getUserByIdService(req, res);
 });
 
 module.exports = {
-    me
+  getUserById,
 };

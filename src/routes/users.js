@@ -1,8 +1,12 @@
-const express = require('express');
+const express = require("express");
 const controllers = require("../controllers");
 const middlewares = require("../middlewares");
 const router = express.Router();
 
-router.get('/me', middlewares.verifyAccessToken, controllers.users.me);
+router.get(
+  "/getUserById/:userId",
+  middlewares.verifyAccessToken,
+  controllers.users.getUserById
+);
 
 module.exports = router;
