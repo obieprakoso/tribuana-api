@@ -16,8 +16,9 @@ app.use((err, req, res, next) => {
   logger.error(err.stack);
   res.status(err.statusCode || 500).send({ error: err.message });
 });
+const options = { customCssUrl: "/public/css/swagger-ui.css" };
 app.use("/api/doc", swaggerDoc.serve);
-app.use("/api/doc", swaggerDoc.setup(swaggerDocumation));
+app.use("/api/doc", swaggerDoc.setup(swaggerDocumation, options));
 
 async function startServer() {
   await connectToDatabase();
