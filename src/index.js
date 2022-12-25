@@ -1,26 +1,30 @@
-const express = require('express');
+const express = require("express");
 const logger = require("./logger");
-const routes = require('./routes');
+const routes = require("./routes");
 const connectToDatabase = require("./database");
 const app = express();
 const port = process.env.PORT || 3000;
+const swaggerDoc = require("swagger-ui-express");
+const swaggerDocumation = require("./helper/documentation");
+const baseResponse = require("./helper/responseDefault");
 
 app.use(express.json());
 
-app.use('/api', routes);
+app.use("/api", routes);
 
 app.use((err, req, res, next) => {
-    logger.error(err.stack);
-    res.status(err.statusCode || 500)
-        .send({ error: err.message });
+  logger.error(err.stack);
+  res.status(err.statusCode || 500).send({ error: err.message });
 });
+app.use("/api/doc", swaggerDoc.serve);
+app.use("/api/doc", swaggerDoc.setup(swaggerDocumation));
 
 async function startServer() {
-    await connectToDatabase();
+  await connectToDatabase();
 
-    app.listen(port, () => {
-        logger.info(`Server listening at http://localhost:${port}`);
-    });
+  app.listen(port, () => {
+    logger.info(`Server listening at http://localhost:${port}`);
+  });
 }
 
 module.exports = startServer;

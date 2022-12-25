@@ -8,7 +8,6 @@ async function signupService(req, res, session) {
   const userDuplicate = await models.User.findOne({
     email: req.body.email,
   }).exec();
-  console.log("d=", userDuplicate);
   if (userDuplicate) {
     throw new HttpError(401, "Email Duplicate");
   }
