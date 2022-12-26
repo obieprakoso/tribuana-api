@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const baseResponse = require("../helper/responseDefault");
 
 function errorHandler(fn) {
   return async function (req, res, next) {
@@ -24,8 +25,8 @@ function withTransaction(fn) {
       result = await fn(req, res, session);
       return result;
     });
-
-    return result;
+    baseResponse(res, res.statusCode, "Success", result);
+    return baseResponse;
   };
 }
 

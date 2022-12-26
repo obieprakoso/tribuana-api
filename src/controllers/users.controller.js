@@ -1,9 +1,10 @@
 const { errorHandler } = require("../util");
-const { HttpError } = require("../error");
 const { userService } = require("../service");
+const baseResponse = require("../helper/responseDefault");
 
 const getUserById = errorHandler(async (req, res) => {
-  return userService.getUserByIdService(req, res);
+  let resultGetUserById = await userService.getUserByIdService(req, res);
+  return baseResponse(res, res.statusCode, "Success", resultGetUserById);
 });
 
 module.exports = {

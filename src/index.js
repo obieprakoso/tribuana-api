@@ -14,7 +14,8 @@ app.use("/api", routes);
 app.use("./helper/swagger-ui.css", express.static("./helper/swagger-ui.css"));
 app.use((err, req, res, next) => {
   logger.error(err.stack);
-  res.status(err.statusCode || 500).send({ error: err.message });
+  // res.status(err.statusCode || 500).send({ error: err.message });
+  baseResponse(res, err.statusCode, err.message, {});
 });
 const options = { customCssUrl: "./helper/swagger-ui.css" };
 app.use("/api/doc", swaggerDoc.serve);

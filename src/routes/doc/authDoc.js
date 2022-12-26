@@ -27,9 +27,13 @@ const loginDoc = {
           schema: {
             type: "object",
             example: {
-              id: "string",
-              accessToken: "string",
-              refreshToken: "string",
+              code: 200,
+              message: "string",
+              data: {
+                id: "string",
+                accessToken: "string",
+                refreshToken: "string",
+              },
             },
           },
         },
@@ -87,9 +91,13 @@ const signup = {
           schema: {
             type: "object",
             example: {
-              id: "string",
-              accessToken: "string",
-              refreshToken: "string",
+              code: 200,
+              message: "string",
+              data: {
+                id: "string",
+                accessToken: "string",
+                refreshToken: "string",
+              },
             },
           },
         },
@@ -123,7 +131,11 @@ const logout = {
           schema: {
             type: "object",
             example: {
-              success: true,
+              code: 200,
+              message: "string",
+              data: {
+                success: true,
+              },
             },
           },
         },
@@ -157,7 +169,11 @@ const logoutAll = {
           schema: {
             type: "object",
             example: {
-              success: true,
+              code: 200,
+              message: "string",
+              data: {
+                success: true,
+              },
             },
           },
         },
@@ -191,9 +207,13 @@ const accessToken = {
           schema: {
             type: "object",
             example: {
-              id: "string",
-              accessToken: "string",
-              refreshToken: "string",
+              code: 200,
+              message: "string",
+              data: {
+                id: "string",
+                accessToken: "string",
+                refreshToken: "string",
+              },
             },
           },
         },
@@ -227,9 +247,13 @@ const refreshToken = {
           schema: {
             type: "object",
             example: {
-              id: "string",
-              accessToken: "string",
-              refreshToken: "string",
+              code: 200,
+              message: "string",
+              data: {
+                id: "string",
+                accessToken: "string",
+                refreshToken: "string",
+              },
             },
           },
         },
