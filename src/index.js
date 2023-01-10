@@ -10,7 +10,7 @@ const baseResponse = require("./helper/responseDefault");
 const cors = require("cors");
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use("/api", routes);
 app.use("./helper/swagger-ui.css", express.static("./helper/swagger-ui.css"));
 app.use((err, req, res, next) => {
