@@ -8,5 +8,10 @@ router.get(
   middlewares.verifyAccessToken,
   controllers.users.getUserById
 );
+router.get(
+  "/getAllUserByActived",
+  middlewares.verifyAccessToken,
+  controllers.users.getAllUserByActived
+);
 
 module.exports = router;

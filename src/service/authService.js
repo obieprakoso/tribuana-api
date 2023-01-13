@@ -49,6 +49,9 @@ async function loginService(req, res, session) {
   if (!userDoc) {
     throw new HttpError(401, "Wrong email or password");
   }
+  if (!userDoc.is_active) {
+    throw new HttpError(401, "Account is lock");
+  }
   await verifyPassword(userDoc.password, req.body.password);
 
   const refreshTokenDoc = models.RefreshToken({
@@ -62,6 +65,11 @@ async function loginService(req, res, session) {
 
   return {
     id: userDoc.id,
+    email: userDoc.email,
+    name: userDoc.name,
+    no_tlp: userDoc.no_tlp,
+    role: userDoc.role,
+    no_unit: userDoc.no_unit,
     accessToken,
     refreshToken,
   };
