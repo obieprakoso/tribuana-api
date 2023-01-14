@@ -1,7 +1,8 @@
 const models = require("../models");
 
 async function getUserByIdService(req, res) {
-  const userDoc = await models.User.findById(req.userId).exec();
+  const userDoc = await models.User.findById(req.params.idUser).exec();
+
   if (!userDoc) {
     throw new HttpError(400, "User not found");
   }

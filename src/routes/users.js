@@ -4,7 +4,7 @@ const middlewares = require("../middlewares");
 const router = express.Router();
 
 router.get(
-  "/getUserById/:userId",
+  "/getUserById/:idUser",
   middlewares.verifyAccessToken,
   controllers.users.getUserById
 );

@@ -1,23 +1,17 @@
-const { errorHandler } = require("../util");
+const { errorHandler, withTransaction } = require("../util");
 const { userService } = require("../service");
-const baseResponse = require("../helper/responseDefault");
 
-const getUserById = errorHandler(async (req, res) => {
-  let resultGetUserById = await userService.getUserByIdService(req, res);
-  return baseResponse(res, res.statusCode, "Success", resultGetUserById);
-});
-const getAllUserByActived = errorHandler(async (req, res) => {
-  let resultGetAllUserByActived = await userService.getAllUserByActived(
-    req,
-    res
-  );
-  return baseResponse(
-    res,
-    res.statusCode,
-    "Success",
-    resultGetAllUserByActived
-  );
-});
+const getUserById = errorHandler(
+  withTransaction(async (req, res, session) => {
+    return userService.getUserByIdService(req, res);
+  })
+);
+
+const getAllUserByActived = errorHandler(
+  withTransaction(async (req, res, session) => {
+    return userService.getAllUserByActived(req, res);
+  })
+);
 
 module.exports = {
   getUserById,

@@ -1,5 +1,7 @@
 const authRootDoc = require("../routes/doc/authDoc");
 const userRootDoc = require("../routes/doc/userDoc");
+const masterMenuRootDoc = require("../routes/doc/masterMenuDoc");
+const subMenuRootDoc = require("../routes/doc/subMenuDoc");
 
 const swaggerDocumation = {
   openapi: "3.0.0",
@@ -11,6 +13,8 @@ const swaggerDocumation = {
   paths: {
     ...authRootDoc,
     ...userRootDoc,
+    ...masterMenuRootDoc,
+    ...subMenuRootDoc,
   },
   components: {
     securitySchemes: {

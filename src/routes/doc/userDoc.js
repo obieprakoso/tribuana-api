@@ -7,7 +7,7 @@ const getUserById = {
   ],
   parameters: [
     {
-      name: "userId",
+      name: "idUser",
       in: "path",
       required: true,
       type: "string",
@@ -84,7 +84,7 @@ const getAllUserByActived = {
 };
 
 const userRootDoc = {
-  "/api/users/getUserById/{userId}": {
+  "/api/users/getUserById/{idUser}": {
     get: getUserById,
   },
   "/api/users/getAllUserByActived/": {
