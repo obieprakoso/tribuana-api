@@ -119,7 +119,6 @@ async function newRefreshToken(req, res, session) {
   const refreshTokenDoc = models.RefreshToken({
     owner: currentRefreshToken.userId,
   });
-
   await refreshTokenDoc.save({ session });
   await models.RefreshToken.deleteOne(
     { _id: currentRefreshToken.tokenId },
@@ -135,9 +134,14 @@ async function newRefreshToken(req, res, session) {
     currentRefreshToken.userId,
     currentRefreshToken.role
   );
-
+  const userDoc = await models.User.findById(currentRefreshToken.userId).exec();
   return {
     id: currentRefreshToken.userId,
+    email: userDoc.email,
+    name: userDoc.name,
+    no_tlp: userDoc.no_tlp,
+    role: userDoc.role,
+    no_unit: userDoc.no_unit,
     accessToken,
     refreshToken,
   };

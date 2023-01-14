@@ -31,6 +31,11 @@ const loginDoc = {
               message: "string",
               data: {
                 id: "string",
+                email: "string",
+                name: "string",
+                no_tlp: "string",
+                role: "string",
+                no_unit: "number",
                 accessToken: "string",
                 refreshToken: "string",
               },
@@ -251,6 +256,11 @@ const refreshToken = {
               message: "string",
               data: {
                 id: "string",
+                email: "string",
+                name: "string",
+                no_tlp: "string",
+                role: "string",
+                no_unit: "number",
                 accessToken: "string",
                 refreshToken: "string",
               },
