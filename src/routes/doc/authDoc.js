@@ -46,6 +46,54 @@ const loginDoc = {
     },
   },
 };
+const loginWebDoc = {
+  tags: ["Auth"],
+  requestBody: {
+    content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          properties: {
+            email: {
+              type: "string",
+              description: "Email of the user",
+            },
+            password: {
+              type: "string",
+              description: "Password of the user",
+            },
+          },
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "OK",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            example: {
+              code: 200,
+              message: "string",
+              data: {
+                id: "string",
+                email: "string",
+                name: "string",
+                no_tlp: "string",
+                role: "string",
+                no_unit: "number",
+                accessToken: "string",
+                refreshToken: "string",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
 
 const signup = {
   tags: ["Auth"],
@@ -82,6 +130,10 @@ const signup = {
             password: {
               type: "string",
               description: "Password of the user",
+            },
+            device: {
+              type: "string",
+              description: "device of the user",
             },
           },
         },
@@ -275,6 +327,9 @@ const refreshToken = {
 const authRootDoc = {
   "/api/auth/login": {
     post: loginDoc,
+  },
+  "/api/auth/login/web": {
+    post: loginWebDoc,
   },
   "/api/auth/signup": {
     post: signup,

@@ -11,7 +11,9 @@ async function addMenuService(req, res, session) {
     name: req.body.name,
     ordering: req.body.ordering,
     icon: req.body.icon,
+    url: req.body.url,
     is_active: req.body.is_active,
+    submenu_exist: req.body.submenu_exist,
   });
   await masterMenuDoc.save({ session });
 
@@ -20,7 +22,9 @@ async function addMenuService(req, res, session) {
     name: masterMenuDoc.name,
     ordering: masterMenuDoc.ordering,
     icon: masterMenuDoc.icon,
+    url: masterMenuDoc.url,
     is_active: masterMenuDoc.is_active,
+    submenu_exist: masterMenuDoc.submenu_exist,
   };
 }
 async function getAllMenuActived(req, res) {

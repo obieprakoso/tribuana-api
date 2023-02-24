@@ -9,6 +9,7 @@ const userSchema = new Schema({
   is_active: Boolean,
   password: { type: String, select: false },
   role: String,
+  device: String,
 });
 
 const User = model("User", userSchema);

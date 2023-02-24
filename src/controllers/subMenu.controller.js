@@ -17,8 +17,14 @@ const getSubMenuById = errorHandler(
     return subMenuService.getSubMenuByIdService(req, res, session);
   })
 );
+const getSubMenuByMenuId = errorHandler(
+  withTransaction(async (req, res, session) => {
+    return subMenuService.getSubMenuByIdMenuService(req, res, session);
+  })
+);
 module.exports = {
   addSubMenu,
   getAllSubMenuByActived,
   getSubMenuById,
+  getSubMenuByMenuId,
 };

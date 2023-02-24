@@ -6,7 +6,16 @@ async function getUserByIdService(req, res) {
   if (!userDoc) {
     throw new HttpError(400, "User not found");
   }
-  return userDoc;
+  return {
+    id: userDoc.id,
+    email: userDoc.email,
+    name: userDoc.name,
+    no_unit: userDoc.no_unit,
+    no_tlp: userDoc.no_tlp,
+    is_active: userDoc.is_active,
+    role: userDoc.role,
+    device: userDoc.device === undefined || null ? null : userDoc.device,
+  };
 }
 async function getAllUserByActived(req, res) {
   const userAllActivedDoc = await models.User.find({
@@ -15,6 +24,7 @@ async function getAllUserByActived(req, res) {
   if (!userAllActivedDoc) {
     throw new HttpError(400, "User not found");
   }
+
   return userAllActivedDoc;
 }
 module.exports = {

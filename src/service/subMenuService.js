@@ -12,9 +12,7 @@ async function addSubMenuService(req, res, session) {
     master_menu: req.body.master_menu,
     ordering: req.body.ordering,
     url: req.body.url,
-    tittle: req.body.tittle,
     icon: req.body.icon,
-    is_target_self: req.body.is_target_self,
     is_active: req.body.is_active,
   });
   await masterSubMenuDoc.save({ session });
@@ -48,8 +46,20 @@ async function getSubMenuByIdService(req, res) {
   }
   return SubMenuDoc;
 }
+async function getSubMenuByIdMenuService(req, res) {
+  const SubMenuDoc = await models.SubMenu.find({
+    master_menu: req.params.menuId,
+    is_active: true,
+  }).exec();
+
+  if (!SubMenuDoc) {
+    throw new HttpError(400, "Sub menu not found");
+  }
+  return SubMenuDoc;
+}
 module.exports = {
   addSubMenuService,
   getAllSubMenuActived,
   getSubMenuByIdService,
+  getSubMenuByIdMenuService,
 };

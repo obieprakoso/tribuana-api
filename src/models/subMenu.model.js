@@ -6,9 +6,7 @@ const subMenuSchema = new Schema({
   master_menu: { type: Schema.Types.ObjectId, ref: "MasterMenu" },
   ordering: { type: Number, unique: false },
   url: String,
-  tittle: String,
   icon: String,
-  is_target_self: Boolean,
   is_active: Boolean,
 });
 

@@ -13,6 +13,12 @@ const login = errorHandler(
   })
 );
 
+const loginWeb = errorHandler(
+  withTransaction(async (req, res, session) => {
+    return authService.loginWebService(req, res, session);
+  })
+);
+
 const newRefreshToken = errorHandler(
   withTransaction(async (req, res, session) => {
     return authService.newRefreshToken(req, res, session);
@@ -38,6 +44,7 @@ const logoutAll = errorHandler(
 module.exports = {
   signup,
   login,
+  loginWeb,
   newRefreshToken,
   newAccessToken,
   logout,

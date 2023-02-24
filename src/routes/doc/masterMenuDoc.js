@@ -23,9 +23,17 @@ const addMenu = {
               type: "string",
               description: "Icon of the menu",
             },
+            url: {
+              type: "string",
+              description: "Url of the menu",
+            },
             is_active: {
               type: "boolean",
               description: "Active of the menu",
+            },
+            submenu_exist: {
+              type: "boolean",
+              description: "Active of the submenu exist",
             },
           },
         },
@@ -81,6 +89,7 @@ const getAllMenuByActived = {
                   ordering: 0,
                   icon: "string",
                   is_active: true,
+                  submenu_exist: true,
                 },
               ],
             },
@@ -122,6 +131,7 @@ const getMenuById = {
                 ordering: 0,
                 icon: "string",
                 is_active: true,
+                submenu_exist: true,
               },
             },
           },

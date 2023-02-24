@@ -19,6 +19,7 @@ async function signupService(req, res, session) {
     is_active: req.body.is_active,
     role: req.body.role,
     password: await argon2.hash(req.body.password),
+    device: req.body.device,
   });
   const refreshTokenDoc = models.RefreshToken({
     owner: userDoc.id,
@@ -42,6 +43,47 @@ async function signupService(req, res, session) {
 }
 
 //Login
+async function loginWebService(req, res, session) {
+  try {
+    const userWebDoc = await models.User.findOne({
+      email: req.body.email,
+      device: "web",
+    })
+      .select("+password")
+      .exec();
+    if (!userWebDoc) {
+      throw new HttpError(401, "Wrong email or password");
+    }
+    if (!userWebDoc.is_active) {
+      throw new HttpError(401, "Account is lock");
+    }
+    await verifyPassword(userWebDoc.password, req.body.password);
+
+    const refreshTokenDoc = models.RefreshToken({
+      owner: userWebDoc.id,
+    });
+
+    await refreshTokenDoc.save({ session });
+
+    const refreshToken = createRefreshToken(userWebDoc.id, refreshTokenDoc.id);
+    const accessToken = createAccessToken(userWebDoc.id);
+
+    return {
+      id: userWebDoc.id,
+      email: userWebDoc.email,
+      name: userWebDoc.name,
+      no_tlp: userWebDoc.no_tlp,
+      role: userWebDoc.role,
+      no_unit: userWebDoc.no_unit,
+      accessToken,
+      refreshToken,
+    };
+  } catch (error) {
+    console.log(error);
+    throw new HttpError(500, error);
+  }
+}
+
 async function loginService(req, res, session) {
   const userDoc = await models.User.findOne({ email: req.body.email })
     .select("+password")
@@ -205,6 +247,7 @@ async function validateRefreshToken(token) {
 module.exports = {
   signupService,
   loginService,
+  loginWebService,
   logout,
   logoutAll,
   newRefreshToken,

@@ -17,4 +17,9 @@ router.get(
   middlewares.verifyAccessToken,
   controllers.subMenu.getSubMenuById
 );
+router.get(
+  "/menu/:menuId",
+  middlewares.verifyAccessToken,
+  controllers.subMenu.getSubMenuByMenuId
+);
 module.exports = router;
