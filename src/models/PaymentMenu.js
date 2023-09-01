@@ -1,7 +1,7 @@
 const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
+  class PaymentMenu extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,33 +13,27 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  User.init(
+  PaymentMenu.init(
     {
-      uuid: DataTypes.UUID,
-      first_name: DataTypes.STRING,
-      last_name: DataTypes.STRING,
-      email: DataTypes.STRING,
-      password: DataTypes.STRING,
-      status: DataTypes.INTEGER,
-      email_verified: DataTypes.INTEGER,
-      address: DataTypes.STRING,
-      phone_number: DataTypes.STRING,
-      number_unit: DataTypes.INTEGER,
+      name: DataTypes.STRING,
+      position: DataTypes.INTEGER,
+      is_active: DataTypes.BOOLEAN,
+      image: DataTypes.STRING,
     },
     {
       sequelize,
-      modelName: "user",
+      modelName: "payment_menu",
       underscored: true,
     }
   );
-  User.associate = (models) => {
-    User.hasMany(models.payment, {
+  PaymentMenu.associate = (models) => {
+    PaymentMenu.hasMany(models.payment, {
       foreignKey: {
-        name: "user_id",
+        name: "payment_menu_id",
         allowNull: false,
       },
       as: "payments",
     });
   };
-  return User;
+  return PaymentMenu;
 };
