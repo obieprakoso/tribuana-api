@@ -1,0 +1,32 @@
+name: Deploy on push automatic
+
+#Controls when the workflow will run
+on:
+  #Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches:
+      - master
+
+#A wolflow run is made up of one or more jobs that can run squentially or in parallel
+jobs:
+  #This workflow contains a single job called "build"
+  api-deploy:
+    name: Deploy
+
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    #Steps represent a sequence of task that  will be executed as part of the job
+    steps:
+    - name: Get latest code
+
+      # Check-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      uses: actions/checkout@v2
+
+    - name: Sync files
+      uses: SamKirkland/FTP-Deploy-Action@4.1.0
+      with:
+        server: ${{ secrets.FTP_TRIBUANA_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        server-dir: tribuana-api/
