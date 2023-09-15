@@ -8,7 +8,7 @@ const auth = require("../middlewares/auth");
 const userController = new UserController();
 // const paymentMenuValidator = new PaymentMenuValidator();
 
-router.get("/:is_active", userController.getAllUser);
-router.get("/detail/:id", userController.getDetailUser);
+router.get("/:is_active", auth(), userController.getAllUser);
+router.get("/detail/:id", auth(), userController.getDetailUser);
 
 module.exports = router;
