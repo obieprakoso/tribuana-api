@@ -14,6 +14,7 @@ class UserValidator {
       address: Joi.string(),
       phone_number: Joi.string().max(13),
       number_unit: Joi.number().required(),
+      role_id: Joi.number().required(),
     });
 
     // schema options

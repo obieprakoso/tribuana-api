@@ -41,5 +41,14 @@ module.exports = (sequelize, DataTypes) => {
       as: "payments",
     });
   };
+  User.associate = (models) => {
+    User.belongsTo(models.role, {
+      foreignKey: {
+        name: "role_id",
+        allowNull: true,
+      },
+      as: "roles",
+    });
+  };
   return User;
 };

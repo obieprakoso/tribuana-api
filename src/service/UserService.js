@@ -2,13 +2,16 @@ const httpStatus = require("http-status");
 const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
 const UserDao = require("../dao/UserDao");
+const RoleDao = require("../dao/RoleDao");
 const responseHandler = require("../helper/responseHandler");
 const logger = require("../config/logger");
 const { userConstant } = require("../config/constant");
+const userDto = require("../dto/userDto");
 
 class UserService {
   constructor() {
     this.userDao = new UserDao();
+    this.roleDao = new RoleDao();
   }
 
   /**
@@ -26,6 +29,14 @@ class UserService {
           "Email already taken"
         );
       }
+      let roleData = await this.roleDao.findById(userBody.role_id);
+      if (!roleData) {
+        message = "Role not found";
+        return responseHandler.returnError(httpStatus.BAD_REQUEST, message);
+      } else if (!roleData.is_active) {
+        message = "Role not active";
+        return responseHandler.returnError(httpStatus.BAD_REQUEST, message);
+      }
       const uuid = uuidv4();
       userBody.email = userBody.email.toLowerCase();
       userBody.password = bcrypt.hashSync(userBody.password, 8);
@@ -39,8 +50,7 @@ class UserService {
         return responseHandler.returnError(httpStatus.BAD_REQUEST, message);
       }
 
-      userData = userData.toJSON();
-      delete userData.password;
+      userData = userData.toJSON().map((each) => new userDto(each));
 
       return responseHandler.returnSuccess(
         httpStatus.CREATED,
@@ -74,7 +84,52 @@ class UserService {
   };
 
   getUserByUuid = async (uuid) => {
-    return this.userDao.findOneByWhere({ uuid });
+    return this.userDao
+      .findOneByWhere({ uuid })
+      .map((each) => new userDto(each));
+  };
+
+  getUserByid = async (id) => {
+    try {
+      let message = "Successfully get detail user";
+      let dataUser = await this.userDao.findById(id);
+      if (!dataUser) {
+        return responseHandler.returnError(
+          httpStatus.NOT_FOUND,
+          "User Not found!"
+        );
+      }
+      dataUser = new userDto(dataUser);
+      return responseHandler.returnSuccess(httpStatus.OK, message, dataUser);
+    } catch (e) {
+      logger.error(e);
+      return responseHandler.returnError(
+        httpStatus.BAD_REQUEST,
+        "Something went wrong!"
+      );
+    }
+  };
+
+  getAllUser = async (status) => {
+    try {
+      let message = "Successfully get all user";
+      var dataAllUser = JSON.stringify(
+        await this.userDao.findByWhere({
+          status,
+        }),
+        null,
+        null
+      );
+      let AllUser = JSON.parse(dataAllUser).map((user) => new userDto(user));
+
+      return responseHandler.returnSuccess(httpStatus.OK, message, AllUser);
+    } catch (e) {
+      logger.error(e);
+      return responseHandler.returnError(
+        httpStatus.BAD_REQUEST,
+        "Something went wrong!"
+      );
+    }
   };
 
   changePassword = async (data, uuid) => {
