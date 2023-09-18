@@ -6,6 +6,7 @@ const { tokenTypes } = require("../config/tokens");
 const TokenDao = require("../dao/TokenDao");
 const RoleDao = require("../dao/RoleDao");
 const RedisService = require("./RedisService");
+const { log } = require("winston");
 
 class TokenService {
   constructor() {
@@ -16,21 +17,27 @@ class TokenService {
 
   /**
    * Generate token
+   * @param {string} roleName
    * @param {string} uuid
    * @param {Moment} expires
    * @param {string} type
    * @param {string} [secret]
-   * @param {string} [Role]
    * @returns {string}
    */
 
-  generateToken = (uuid, expires, type, secret = config.jwt.secret, role) => {
+  generateToken = (
+    roleName,
+    uuid,
+    expires,
+    type,
+    secret = config.jwt.secret
+  ) => {
     const payload = {
+      role: roleName,
       sub: uuid,
       iat: moment().unix(),
       exp: expires.unix(),
       type,
-      role: role,
     };
     return jwt.sign(payload, secret);
   };
@@ -103,36 +110,36 @@ class TokenService {
       config.jwt.accessExpirationMinutes,
       "minutes"
     );
-
     let role = await this.roleDao.findById(user.role_id);
-
+    const roleName = role.name;
     const accessToken = await this.generateToken(
-      user.uuid,
+      roleName,
+      user.id,
       accessTokenExpires,
-      tokenTypes.ACCESS,
-      role.name
+      tokenTypes.ACCESS
     );
+
     const refreshTokenExpires = moment().add(
       config.jwt.refreshExpirationDays,
       "days"
     );
     const refreshToken = await this.generateToken(
-      user.uuid,
+      roleName,
+      user.id,
       refreshTokenExpires,
-      tokenTypes.REFRESH,
-      role.name
+      tokenTypes.REFRESH
     );
     const authTokens = [];
     authTokens.push({
       token: accessToken,
-      user_uuid: user.uuid,
+      user_id: user.id,
       expires: accessTokenExpires.toDate(),
       type: tokenTypes.ACCESS,
       blacklisted: false,
     });
     authTokens.push({
       token: refreshToken,
-      user_uuid: user.uuid,
+      user_id: user.id,
       expires: refreshTokenExpires.toDate(),
       type: tokenTypes.REFRESH,
       blacklisted: false,
