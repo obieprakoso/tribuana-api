@@ -114,7 +114,7 @@ class TokenService {
     const roleName = role.name;
     const accessToken = await this.generateToken(
       roleName,
-      user.id,
+      user.uuid,
       accessTokenExpires,
       tokenTypes.ACCESS
     );
@@ -125,7 +125,7 @@ class TokenService {
     );
     const refreshToken = await this.generateToken(
       roleName,
-      user.id,
+      user.uuid,
       refreshTokenExpires,
       tokenTypes.REFRESH
     );
