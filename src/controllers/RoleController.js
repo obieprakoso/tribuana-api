@@ -19,6 +19,20 @@ class RoleController {
       res.status(httpStatus.BAD_GATEWAY).send(e);
     }
   };
+
+  getAllRole = async (req, res) => {
+    try {
+      var isTrueSet = req.params.is_active.toLowerCase() === "true";
+      const roles = await this.roleService.getAllRole(isTrueSet);
+      const { status } = roles.response;
+
+      const { message, data } = roles.response;
+      res.status(roles.statusCode).send({ status, message, data });
+    } catch (e) {
+      logger.error(e);
+      res.status(httpStatus.BAD_GATEWAY).send(e);
+    }
+  };
 }
 
 module.exports = RoleController;

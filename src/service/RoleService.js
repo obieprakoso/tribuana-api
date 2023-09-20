@@ -2,6 +2,7 @@ const RoleDao = require("../dao/RoleDao");
 const logger = require("../config/logger");
 const httpStatus = require("http-status");
 const responseHandler = require("../helper/responseHandler");
+const roleDto = require("../dto/roleDto");
 
 class RoleService {
   constructor() {
@@ -35,6 +36,27 @@ class RoleService {
         message,
         roleData
       );
+    } catch (e) {
+      logger.error(e);
+      return responseHandler.returnError(
+        httpStatus.BAD_REQUEST,
+        "Something went wrong!"
+      );
+    }
+  };
+  getAllRole = async (is_active) => {
+    try {
+      let message = "Successfully get all role";
+      var dataAllRole = JSON.stringify(
+        await this.roleDao.findByWhere({
+          is_active,
+        }),
+        null,
+        null
+      );
+      let AllRole = JSON.parse(dataAllRole).map((role) => new roleDto(role));
+
+      return responseHandler.returnSuccess(httpStatus.OK, message, AllRole);
     } catch (e) {
       logger.error(e);
       return responseHandler.returnError(
