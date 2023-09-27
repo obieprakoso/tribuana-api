@@ -10,14 +10,12 @@ const { log } = require("winston");
 
 class TokenService {
   constructor() {
-    this.roleDao = new RoleDao();
     this.tokenDao = new TokenDao();
     this.redisService = new RedisService();
   }
 
   /**
    * Generate token
-   * @param {string} roleName
    * @param {string} uuid
    * @param {Moment} expires
    * @param {string} type
@@ -25,15 +23,8 @@ class TokenService {
    * @returns {string}
    */
 
-  generateToken = (
-    roleName,
-    uuid,
-    expires,
-    type,
-    secret = config.jwt.secret
-  ) => {
+  generateToken = (uuid, expires, type, secret = config.jwt.secret) => {
     const payload = {
-      role: roleName,
       sub: uuid,
       iat: moment().unix(),
       exp: expires.unix(),
@@ -110,21 +101,16 @@ class TokenService {
       config.jwt.accessExpirationMinutes,
       "minutes"
     );
-    let role = await this.roleDao.findById(user.role_id);
-    const roleName = role.name;
     const accessToken = await this.generateToken(
-      roleName,
       user.uuid,
       accessTokenExpires,
       tokenTypes.ACCESS
     );
-
     const refreshTokenExpires = moment().add(
       config.jwt.refreshExpirationDays,
       "days"
     );
     const refreshToken = await this.generateToken(
-      roleName,
       user.uuid,
       refreshTokenExpires,
       tokenTypes.REFRESH
@@ -132,14 +118,14 @@ class TokenService {
     const authTokens = [];
     authTokens.push({
       token: accessToken,
-      user_id: user.id,
+      user_uuid: user.uuid,
       expires: accessTokenExpires.toDate(),
       type: tokenTypes.ACCESS,
       blacklisted: false,
     });
     authTokens.push({
       token: refreshToken,
-      user_id: user.id,
+      user_uuid: user.uuid,
       expires: refreshTokenExpires.toDate(),
       type: tokenTypes.REFRESH,
       blacklisted: false,
