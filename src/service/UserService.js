@@ -49,13 +49,14 @@ class UserService {
         message = "Registration Failed! Please Try again.";
         return responseHandler.returnError(httpStatus.BAD_REQUEST, message);
       }
-
-      userData = userData.toJSON().map((each) => new userDto(each));
+      const dataset = [];
+      dataset.push(userData.dataValues);
+      let userDtoData = dataset.map((each) => new userDto(each));
 
       return responseHandler.returnSuccess(
         httpStatus.CREATED,
         message,
-        userData
+        Object.assign({}, ...userDtoData)
       );
     } catch (e) {
       logger.error(e);
