@@ -12,13 +12,11 @@ process.env.PWD = process.cwd();
 const app = express();
 
 // enable cors
-// const corsOptions = {
-//   origin: ["http://127.0.0.1:5173"],
-//   credentials: true,
-// };
-
-app.use(cors());
-app.options("*", cors());
+const corsConfig = {
+  credentials: true,
+  origin: true,
+};
+app.use(cors(corsConfig));
 
 app.use(express.static(`${process.env.PWD}/public`));
 
