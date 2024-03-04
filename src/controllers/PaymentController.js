@@ -19,6 +19,24 @@ class PaymentController {
       res.status(httpStatus.BAD_GATEWAY).send(e);
     }
   };
+
+  getPaymentByFilter = async (req, res) => {
+    try {
+      const payment = await this.paymentService.getPaymentByFilter(
+        req.params.start_date,
+        req.params.end_date,
+        req.params.user_id,
+        req.params.payment_menu_id
+      );
+      const { status } = payment.response;
+
+      const { message, data } = payment.response;
+      res.status(payment.statusCode).send({ status, message, data });
+    } catch (e) {
+      logger.error(e);
+      res.status(httpStatus.BAD_GATEWAY).send(e);
+    }
+  };
 }
 
 module.exports = PaymentController;

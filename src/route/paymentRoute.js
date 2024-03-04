@@ -9,7 +9,10 @@ const paymentController = new PaymentController();
 // const paymentMenuValidator = new PaymentMenuValidator();
 
 router.post("/", paymentController.createPayment);
-// router.get("/:is_active", auth(), paymentMenuController.getAllPaymentMenu);
+router.get(
+  "/:start_date/:end_date/:user_id?/:payment_menu_id?",
+  paymentController.getPaymentByFilter
+);
 // router.get("/detail/:id", paymentMenuController.getDetailPaymentMenu);
 // router.put(
 //   "/change/:id",

@@ -8,7 +8,7 @@ const auth = require("../middlewares/auth");
 const roleController = new RoleController();
 // const paymentMenuValidator = new PaymentMenuValidator();
 
-router.post("/", auth(), roleController.createRole);
+router.post("/", roleController.createRole);
 router.get("/:is_active", auth(), roleController.getAllRole);
 
 module.exports = router;

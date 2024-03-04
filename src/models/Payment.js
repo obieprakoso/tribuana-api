@@ -42,14 +42,5 @@ module.exports = (sequelize, DataTypes) => {
         as: "users",
       });
   };
-  Payment.associate = (models) => {
-    Payment.belongsTo(models.user, {
-      foreignKey: {
-        name: "user_id",
-        allowNull: false,
-      },
-      as: "users",
-    });
-  };
   return Payment;
 };

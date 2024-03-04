@@ -5,6 +5,7 @@ const logger = require("../config/logger");
 const httpStatus = require("http-status");
 const responseHandler = require("../helper/responseHandler");
 const { paymentMethod } = require("../config/constant");
+const paymentDto = require("../dto/paymentDto");
 
 class PaymentService {
   constructor() {
@@ -51,6 +52,36 @@ class PaymentService {
         httpStatus.CREATED,
         message,
         paymentData
+      );
+    } catch (e) {
+      logger.error(e);
+      return responseHandler.returnError(
+        httpStatus.BAD_REQUEST,
+        "Something went wrong!"
+      );
+    }
+  };
+
+  getPaymentByFilter = async (startDate, endDate, userId, paymentMenu) => {
+    try {
+      let message = "Successfully get Payment";
+
+      var datResPaymet = JSON.stringify(
+        await this.paymentDao.getPaymentByFilter(
+          startDate,
+          endDate,
+          userId,
+          paymentMenu
+        )
+      );
+      let paymentDtoData = JSON.parse(datResPaymet).map(
+        (pay) => new paymentDto(pay)
+      );
+
+      return responseHandler.returnSuccess(
+        httpStatus.OK,
+        message,
+        paymentDtoData
       );
     } catch (e) {
       logger.error(e);
